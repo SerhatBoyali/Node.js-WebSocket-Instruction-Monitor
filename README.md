@@ -55,5 +55,4 @@ MIT
 ---
 
 **Contact / İletişim:**
-Your Name / Adınız
-GitHub: [github.com/yourusername](https://github.com/yourusername)
+Serhat Boyalı
