@@ -41,6 +41,14 @@ node server.js
 - testing
 - packaging
 
+<img width="1011" height="648" alt="Screenshot 2025-10-16 215501_edited" src="https://github.com/user-attachments/assets/3026613f-5b8f-4604-a6c4-63dfad1a6344" />
+
+![WhatsApp Görsel 2025-10-16 saat 21 52 51_295e4b23](https://github.com/user-attachments/assets/cbe6c18b-1d12-4b01-9df0-b19f724d79ca)
+
+
+![WhatsApp Görsel 2025-10-16 saat 21 52 51_a7749c10](https://github.com/user-attachments/assets/e90df117-6cee-4ff8-b747-c681c8a6f5cb)
+
+
 ## License
 MIT
 
