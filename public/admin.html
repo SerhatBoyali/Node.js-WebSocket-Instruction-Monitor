@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel - Üretim Modeli Seçimi</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <style>
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+  font-family: Arial, sans-serif;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+h1, h2 {
+  margin: 10px 0;
+  text-align: center;
+}
+
+.button-container {
+  display: flex;
+  flex-wrap: wrap;          
+  justify-content: center;  
+  gap: 10px;
+  width: 100%;
+  max-width: 800px;
+  padding: 10px;
+}
+
+button {
+  width: 150px;
+  height: 50px;
+  background-color: #e0e0e0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/* Hover efekti */
+button:hover {
+  background-color: #d5d5d5;
+}
+
+button.active {
+  background-color: #007BFF;
+  color: #fff;
+  border-color: #007BFF;
+}
+
+  </style>
+</head>
+<body>
+  <h1>Model Seç</h1>
+  
+  <div class="button-container">
+    <button onclick="selectModel('Sun Digital')">Sun Digital</button>
+    <button onclick="selectModel('Digital - S')">Digital - S</button>
+    <button onclick="selectModel('Digital - SQ')">Digital - SQ</button>
+    <button onclick="selectModel('Up & Down')">Up & Down</button>
+    <button onclick="selectModel('Up & Down - S')">Up & Down - S</button>
+    <button onclick="selectModel('Up & Down - SQ')">Up & Down - SQ</button>
+    <button onclick="selectModel('Eco Multiple')">Eco Multiple</button>
+    <button onclick="selectModel('Sigma')">Sigma</button>
+    <button onclick="selectModel('On & Off')">On & Off</button>
+    <button onclick="selectModel('One Touch')">One Touch</button>
+    <button onclick="selectModel('Multiple - Yatay - Dry - V2')">Multiple Yatay    <br>   Dry V2</button>
+  </div>
+
+  <script>
+    const socket = io();
+
+    function selectModel(model) {
+      const buttons = document.querySelectorAll('.button-container button');
+      buttons.forEach(btn => btn.classList.remove('active'));
+
+      const activeButton = Array.from(buttons).find(btn => btn.textContent.trim() === model);
+      if (activeButton) {
+        activeButton.classList.add('active');
+      }
+      
+      socket.emit('modelSelected', { model });
+      alert(`Model ${model} seçildi ve talimatlar gönderildi.`);
+    }
+  </script>
+</body>
+</html>

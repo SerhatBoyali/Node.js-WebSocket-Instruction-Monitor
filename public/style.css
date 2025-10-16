@@ -1,0 +1,79 @@
+/* Genel sayfa düzeni */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    height: 100%;
+  }
+  
+  #monitor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100vh;
+  }
+  
+  .header {
+    width: 100%;
+    background-color: #4b8800;
+    color: white;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .header h1 {
+    font-size: 36px;
+  }
+  
+  .instructions-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: calc(100% - 80px); 
+    overflow: hidden;
+  }
+  
+  .instructions-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  
+  .instruction {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+    width: 100%;
+    align-items: center;
+  }
+  
+  .instruction p {
+    font-size: 24px;
+    font-weight: bold;
+    flex: 2;
+    margin-right: 20px;
+  }
+  
+  .instruction img {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    margin-right: 10px;
+    border-radius: 10px;
+  }
+  
+  .instruction img:last-child {
+    margin-right: 0;
+  }
+  

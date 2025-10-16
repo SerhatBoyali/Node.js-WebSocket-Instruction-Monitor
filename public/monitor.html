@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Üretim Talimatı Monitörü</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="instructions.js"></script>
+  <script src="client.js"></script>
+  <link rel="stylesheet" href="monitor.css">
+</head>
+
+<body>
+  <div id="monitor">
+    <div class="header">
+      <h2 id="modelTitle">Model: -</h2>
+    </div>
+
+    <div class="instructions-container">
+      <div id="instructionList" class="instructions-list"></div>
+      <div id="imageList" class="images-list"></div>
+    </div>
+  </div>
+
+  <script>
+    const socket = io();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const monitorId = urlParams.get('monitorId');
+    const role = urlParams.get('role');
+
+    socket.emit('registerMonitor', { monitorId, role });
+
+    const imagesData = {
+      "Sun Digital": {
+        cable: [
+          '/images/sun-digital/cable1.jpg',
+          '/images/sun-digital/cable2.jpg',
+          '/images/sun-digital/cable3.jpg',
+          '/images/sun-digital/cable4.jpg'
+        ],
+        soldering: [
+          '/images/sun-digital/soldering1.jpg',
+          '/images/sun-digital/soldering2.jpg',
+          '/images/sun-digital/soldering3.jpg',
+          '/images/sun-digital/soldering4.jpg'
+        ],
+        assembly: [
+          '/images/sun-digital/assembly1.jpg',
+          '/images/sun-digital/assembly2.jpg',
+          '/images/sun-digital/assembly3.jpg',
+          '/images/sun-digital/assembly4.jpg'
+        ],
+        testing: [
+          '/images/sun-digital/testing1.jpg',
+          '/images/sun-digital/testing2.jpg',
+          '/images/sun-digital/testing3.jpg',
+          '/images/sun-digital/testing4.jpg'
+        ],
+        packaging: [
+          '/images/sun-digital/packaging1.jpg',
+          '/images/sun-digital/packaging2.jpg',
+          '/images/sun-digital/packaging3.jpg',
+          '/images/sun-digital/packaging4.jpg'
+        ]
+      },
+      "Multiple - Yatay - Dry - V2": {
+        cable: [
+          '/images/multiple-yatay-dry-v2/cable1.jpg',
+          '/images/multiple-yatay-dry-v2/cable2.jpg',
+          '/images/multiple-yatay-dry-v2/cable3.jpg',
+          '/images/multiple-yatay-dry-v2/cable4.jpg'
+        ],
+        soldering: [
+          '/images/multiple-yatay-dry-v2/soldering1.jpg',
+          '/images/multiple-yatay-dry-v2/soldering2.jpg',
+          '/images/multiple-yatay-dry-v2/soldering3.jpg',
+          '/images/multiple-yatay-dry-v2/soldering4.jpg'
+        ],
+        assembly: [
+           '/images/multiple-yatay-dry-v2/soldering1.jpg',
+          '/images/multiple-yatay-dry-v2/soldering2.jpg',
+          '/images/multiple-yatay-dry-v2/soldering3.jpg',
+          '/images/multiple-yatay-dry-v2/soldering4.jpg'
+        ],
+        testing: [
+           '/images/multiple-yatay-dry-v2/soldering1.jpg',
+          '/images/multiple-yatay-dry-v2/soldering2.jpg',
+          '/images/multiple-yatay-dry-v2/soldering3.jpg',
+          '/images/multiple-yatay-dry-v2/soldering4.jpg'
+        ],
+        packaging: [
+          '/images/multiple-yatay-dry-v2/packaging1.jpg',
+          '/images/multiple-yatay-dry-v2/packaging2.jpg',
+          '/images/multiple-yatay-dry-v2/packaging3.jpg',
+          '/images/multiple-yatay-dry-v2/packaging4.jpg'
+        ]
+      },
+      "Digital - S": {
+        cable: [
+          '/images/digital-s/cable1.jpg',
+          '/images/digital-s/cable2.jpg',
+          '/images/digital-s/cable3.jpg',
+          '/images/digital-s/cable4.jpg'
+        ],
+        soldering: [
+          '/images/digital-s/soldering1.jpg',
+          '/images/digital-s/soldering2.jpg',
+          '/images/digital-s/soldering3.jpg',
+          '/images/digital-s/soldering4.jpg'
+        ],
+        assembly: [
+          '/images/digital-s/assembly1.jpg',
+          '/images/digital-s/assembly2.jpg',
+          '/images/digital-s/assembly3.jpg',
+          '/images/digital-s/assembly4.jpg'
+        ],
+        testing: [
+          '/images/digital-s/testing1.jpg',
+          '/images/digital-s/testing2.jpg',
+          '/images/digital-s/testing3.jpg',
+          '/images/digital-s/testing4.jpg',
+        ],
+        packaging: [
+          '/images/digital-s/packaging1.jpg',
+          '/images/digital-s/packaging2.jpg',
+          '/images/digital-s/packaging3.jpg',
+          '/images/digital-s/packaging4.jpg',
+        ]
+      },
+      "Digital - SQ": {
+        cable: [
+          '/images/digital-sq/cable1.jpg',
+          '/images/digital-sq/cable2.jpg',
+          '/images/digital-sq/cable3.jpg',
+          '/images/digital-sq/cable4.jpg'
+        ],
+        soldering: [
+          '/images/digital-sq/soldering1.jpg',
+          '/images/digital-sq/soldering2.jpg',
+          '/images/digital-sq/soldering3.jpg',
+          '/images/digital-sq/soldering4.jpg'
+        ],
+        assembly: [
+          '/images/digital-sq/assembly1.jpg',
+          '/images/digital-sq/assembly2.jpg',
+          '/images/digital-sq/assembly3.jpg',
+          '/images/digital-sq/assembly4.jpg'
+        ],
+        testing: [
+          '/images/digital-sq/testing1.jpg',
+          '/images/digital-sq/testing2.jpg',
+          '/images/digital-sq/testing3.jpg',
+          '/images/digital-sq/testing4.jpg',
+        ],
+        packaging: [
+          '/images/digital-sq/packaging1.jpg',
+          '/images/digital-sq/packaging2.jpg',
+          '/images/digital-sq/packaging3.jpg',
+          '/images/digital-sq/packaging4.jpg',
+        ]
+      },
+      "Up & Down": {
+        cable: [
+          '/images/up-down/cable1.jpg',
+          '/images/up-down/cable2.jpg',
+          '/images/up-down/cable3.jpg',
+          '/images/up-down/cable4.jpg'
+        ],
+        soldering: [
+          '/images/up-down/soldering1.jpg',
+          '/images/up-down/soldering2.jpg',
+          '/images/up-down/soldering3.jpg',
+          '/images/up-down/soldering4.jpg'
+        ],
+        assembly: [
+          '/images/up-down/assembly1.jpg',
+          '/images/up-down/assembly2.jpg',
+          '/images/up-down/assembly3.jpg',
+          '/images/up-down/assembly4.jpg'
+        ],
+        testing: [
+          '/images/up-down/testing1.jpg',
+          '/images/up-down/testing2.jpg',
+          '/images/up-down/testing3.jpg',
+          '/images/up-down/testing4.jpg',
+        ],
+        packaging: [
+          '/images/up-down/packaging1.jpg',
+          '/images/up-down/packaging2.jpg',
+          '/images/up-down/packaging3.jpg',
+          '/images/up-down/packaging4.jpg',
+        ]
+      },
+      "Up & Down - S": {
+        cable: [
+          '/images/up-down-s/cable1.jpg',
+          '/images/up-down-s/cable2.jpg',
+          '/images/up-down-s/cable3.jpg',
+          '/images/up-down-s/cable4.jpg'
+        ],
+        soldering: [
+          '/images/up-down-s/soldering1.jpg',
+          '/images/up-down-s/soldering2.jpg',
+          '/images/up-down-s/soldering3.jpg',
+          '/images/up-down-s/soldering4.jpg'
+        ],
+        assembly: [
+          '/images/up-down-s/assembly1.jpg',
+          '/images/up-down-s/assembly2.jpg',
+          '/images/up-down-s/assembly3.jpg',
+          '/images/up-down-s/assembly4.jpg'
+        ],
+        testing: [
+          '/images/up-down-s/testing1.jpg',
+          '/images/up-down-s/testing2.jpg',
+          '/images/up-down-s/testing3.jpg',
+          '/images/up-down-s/testing4.jpg',
+        ],
+        packaging: [
+          '/images/up-down-s/packaging1.jpg',
+          '/images/up-down-s/packaging2.jpg',
+          '/images/up-down-s/packaging3.jpg',
+          '/images/up-down-s/packaging4.jpg',
+        ]
+      },
+      "Up & Down - SQ": {
+        cable: [
+          '/images/up-down-sq/cable1.jpg',
+          '/images/up-down-sq/cable2.jpg',
+          '/images/up-down-sq/cable3.jpg',
+          '/images/up-down-sq/cable4.jpg'
+        ],
+        soldering: [
+          '/images/up-down-sq/soldering1.jpg',
+          '/images/up-down-sq/soldering2.jpg',
+          '/images/up-down-sq/soldering3.jpg',
+          '/images/up-down-sq/soldering4.jpg'
+        ],
+        assembly: [
+          '/images/up-down-sq/assembly1.jpg',
+          '/images/up-down-sq/assembly2.jpg',
+          '/images/up-down-sq/assembly3.jpg',
+          '/images/up-down-sq/assembly4.jpg'
+        ],
+        testing: [
+          '/images/up-down-sq/testing1.jpg',
+          '/images/up-down-sq/testing2.jpg',
+          '/images/up-down-sq/testing3.jpg',
+          '/images/up-down-sq/testing4.jpg',
+        ],
+        packaging: [
+          '/images/up-down-sq/packaging1.jpg',
+          '/images/up-down-sq/packaging2.jpg',
+          '/images/up-down-sq/packaging3.jpg',
+          '/images/up-down-sq/packaging4.jpg',
+        ]
+      },
+      "On & Off": {
+        cable: [
+          '/images/on-off/cable1.jpg',
+          '/images/on-off/cable2.jpg',
+          '/images/on-off/cable3.jpg',
+          '/images/on-off/cable4.jpg'
+        ],
+        soldering: [
+          '/images/on-off/soldering1.jpg',
+          '/images/on-off/soldering2.jpg',
+          '/images/on-off/soldering3.jpg',
+          '/images/on-off/soldering4.jpg'
+        ],
+        assembly: [
+          '/images/on-off/assembly1.jpg',
+          '/images/on-off/assembly2.jpg',
+          '/images/on-off/assembly3.jpg',
+          '/images/on-off/assembly4.jpg'
+        ],
+        testing: [
+          '/images/on-off/testing1.jpg',
+          '/images/on-off/testing2.jpg',
+          '/images/on-off/testing3.jpg',
+          '/images/on-off/testing4.jpg',
+        ],
+        packaging: [
+          '/images/on-off/packaging1.jpg',
+          '/images/on-off/packaging2.jpg',
+          '/images/on-off/packaging3.jpg',
+          '/images/on-off/packaging4.jpg',
+        ]
+      },
+      "One Touch": {
+        cable: [
+          '/images/one-touch/cable1.jpg',
+          '/images/one-touch/cable2.jpg',
+          '/images/one-touch/cable3.jpg',
+          '/images/one-touch/cable4.jpg'
+        ],
+        soldering: [
+          '/images/one-touch/soldering1.jpg',
+          '/images/one-touch/soldering2.jpg',
+          '/images/one-touch/soldering3.jpg',
+          '/images/one-touch/soldering4.jpg'
+        ],
+        assembly: [
+          '/images/one-touch/assembly1.jpg',
+          '/images/one-touch/assembly2.jpg',
+          '/images/one-touch/assembly3.jpg',
+          '/images/one-touch/assembly4.jpg'
+        ],
+        testing: [
+          '/images/one-touch/testing1.jpg',
+          '/images/one-touch/testing2.jpg',
+          '/images/one-touch/testing3.jpg',
+          '/images/one-touch/testing4.jpg',
+        ],
+        packaging: [
+          '/images/one-touch/packaging1.jpg',
+          '/images/one-touch/packaging2.jpg',
+          '/images/one-touch/packaging3.jpg',
+          '/images/one-touch/packaging4.jpg'
+        ]
+      },
+      "Eco Multiple" : {
+        cable: [
+          '/images/eco-multiple/cable1.jpg',
+          '/images/eco-multiple/cable2.jpg',
+          '/images/eco-multiple/cable3.jpg',
+          '/images/eco-multiple/cable4.jpg'
+        ],
+        soldering: [
+          '/images/eco-multiple/soldering1.jpg',
+          '/images/eco-multiple/soldering2.jpg',
+          '/images/eco-multiple/soldering3.jpg',
+          '/images/eco-multiple/soldering4.jpg'
+        ],
+        assembly: [
+          '/images/eco-multiple/assembly1.jpg',
+          '/images/eco-multiple/assembly2.jpg',
+          '/images/eco-multiple/assembly3.jpg',
+          '/images/eco-multiple/assembly4.jpg'
+        ],
+        testing: [
+          '/images/eco-multiple/testing1.jpg',
+          '/images/eco-multiple/testing2.jpg',
+          '/images/eco-multiple/testing3.jpg',
+          '/images/eco-multiple/testing4.jpg',
+        ],
+        packaging: [
+          '/images/eco-multiple/packaging1.jpg',
+          '/images/eco-multiple/packaging2.jpg',
+          '/images/eco-multiple/packaging3.jpg',
+          '/images/eco-multiple/packaging4.jpg',
+        ]
+      },
+      "Sigma" : {
+        cable: [
+          '/images/sigma/cable1.jpg',
+          '/images/sigma/cable2.jpg',
+          '/images/sigma/cable3.jpg',
+          '/images/sigma/cable4.jpg'
+        ],
+        soldering: [
+          '/images/sigma/soldering1.jpg',
+          '/images/sigma/soldering2.jpg',
+          '/images/sigma/soldering3.jpg',
+          '/images/sigma/soldering4.jpg'
+        ],
+        assembly: [
+          '/images/sigma/assembly1.jpg',
+          '/images/sigma/assembly2.jpg',
+          '/images/sigma/assembly3.jpg',
+          '/images/sigma/assembly4.jpg'
+        ],
+        testing: [
+          '/images/sigma/testing1.jpg',
+          '/images/sigma/testing2.jpg',
+          '/images/sigma/testing3.jpg',
+          '/images/sigma/testing4.jpg',
+        ],
+        packaging: [
+          '/images/sigma/packaging1.jpg',
+          '/images/sigma/packaging2.jpg',
+          '/images/sigma/packaging3.jpg',
+          '/images/sigma/packaging4.jpg',
+        ]
+      }
+    };
+
+
+    function getImageFiles(model, role) {
+      return (imagesData[model] && imagesData[model][role]) || ['/images/default1.jpg'];
+    }
+
+    socket.on('updateModel', ({ model, role }) => {
+      console.log('Model ve Role geldi:', model, role);
+      document.getElementById('modelTitle').innerText = `Model: ${model}`;
+
+      const instructions = getInstructions(model, role);
+      console.log('Talimatlar:', instructions);
+
+      const instructionList = document.getElementById('instructionList');
+      const imageList = document.getElementById('imageList');
+
+      instructionList.innerHTML = "";
+      imageList.innerHTML = "";
+
+      if (instructions.length === 0) {
+        instructionList.innerHTML = "<p>Bu role uygun talimat bulunamadı.</p>";
+        return;
+      }
+
+      instructions.forEach(step => {
+        if (step.text) {
+          const div = document.createElement('div');
+          div.classList.add('instruction');
+          div.innerHTML = `<p>${step.text}</p>`;
+          instructionList.appendChild(div);
+        }
+      });
+
+      const imageFiles = getImageFiles(model, role);
+
+      imageFiles.forEach(file => {
+        const container = document.createElement('div');
+        container.classList.add('image-container');
+        const img = document.createElement('img');
+        img.src = file;
+        img.alt = `Talimat Resmi: ${file}`;
+        container.appendChild(img);
+        imageList.appendChild(container);
+      });
+    });
+  </script>
+</body>
+
+</html>
